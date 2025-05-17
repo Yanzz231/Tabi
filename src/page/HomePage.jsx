@@ -81,7 +81,30 @@ export default function HomePage() {
                 </div>
 
                 {/* FLEX RIGHT */}
+                <div className="w-full lg:w-1/2 flex justify-center mt-12 lg:mt-0">
+                    <div className="relative w-full max-w-md">
+                        <div className={`absolute -inset-1 bg-gradient-to-r ${isDay ? 'from-[#5D6E47] to-[#7D5F40]' : 'from-green-400 to-teal-400'} rounded-lg blur opacity-30 animate-pulse`}></div>
+                        <div className={`relative ${theme.card.bg} backdrop-blur-md rounded-2xl p-6 lg:p-8 border ${theme.card.border} shadow-xl animate-[fadeInUp_1s_ease-in-out]`}>
+                            <div className={`absolute top-0 right-0 -mt-4 -mr-4 w-20 h-20 ${isDay ? 'bg-[#5D6E47]' : 'bg-green-500'} rounded-full flex items-center justify-center text-white font-bold`}>
+                                GRATIS
+                            </div>
+                            <h3 className={`${theme.text.heading} text-lg sm:text-xl md:text-2xl font-bold mb-4 w-60`}>Mulai perjalanan Anda hari ini</h3>
+                            <p className={`${theme.text.light} mb-6`}>Bergabunglah dengan ribuan pembelajar dari seluruh dunia yang sudah belajar dengan Tabi.</p>
 
+                            <div className="space-y-4">
+                                {['Rencana pembelajaran yang dipersonalisasi', 'Latihan interaktif & kuis', 'Pelacakan kemajuan & analitik'].map((item, index) => (
+                                    <TextHome isDay={isDay} index={index} item={item} theme={theme} />
+                                ))}
+                            </div>
+
+                            {/* <a href="/register">
+                                <button className={`w-full ${theme.button.cta} font-bold mt-8 py-3 rounded-lg transition-all`}>
+                                    BUAT AKUN GRATIS
+                                </button>
+                            </a> */}
+                        </div>
+                    </div>
+                </div>
 
 
             </div>
