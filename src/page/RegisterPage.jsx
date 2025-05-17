@@ -5,6 +5,7 @@ import { isDaytime, colorData, getAnimationStyle, shouldShake } from '../functio
 
 // COMPONENTS
 import { InputText } from '../component/InputComponents';
+import { CardLogin } from '../component/CardComponents';
 import { BackgroundImage } from '../component/BackgroundComponents';
 import { AnimatedLogo } from '../component/LogoComponents';
 
@@ -69,11 +70,62 @@ const RegisterPage = () => {
     };
 
     const validateForm = () => {
-      
+        const newErrors = {};
+        const fieldsToShake = [];
+
+        if (!data.firstName) {
+            newErrors.firstName = 'First name is required';
+            fieldsToShake.push('firstName');
+        }
+
+        if (!data.lastName) {
+            newErrors.lastName = 'Last name is required';
+            fieldsToShake.push('lastName');
+        }
+
+        if (!data.email) {
+            newErrors.email = 'Email is required';
+            fieldsToShake.push('email');
+        } else if (!/\S+@\S+\.\S+/.test(data.email)) {
+            newErrors.email = 'Email is invalid';
+            fieldsToShake.push('email');
+        }
+
+        if (!data.password) {
+            newErrors.password = 'Password is required';
+            fieldsToShake.push('password');
+        } else if (data.password.length < 8) {
+            newErrors.password = 'Password must be at least 8 characters';
+            fieldsToShake.push('password');
+        }
+
+        if (data.password !== data.confirmPassword) {
+            newErrors.confirmPassword = 'Passwords do not match';
+            fieldsToShake.push('confirmPassword');
+        }
+
+        setShakeFields(fieldsToShake);
+        setErrors(newErrors)
+        return newErrors;
     };
 
     const handleSubmit = (e) => {
-       
+        e.preventDefault();
+        setSubmitted(true);
+        setLoading(true);
+
+        const formErrors = validateForm();
+
+        if (Object.keys(formErrors).length === 0) {
+            console.log('Form submitted:', data);
+            setTimeout(() => {
+                setLoading(false);
+            }, 1500);
+        } else {
+            setTimeout(() => {
+                setLoading(false);
+            }, 500);
+        }
     };
 
     return (
@@ -237,7 +289,23 @@ const RegisterPage = () => {
                             </div>
 
                             {/* LOGIN WITH */}
-  
+                            <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                                {['Google', 'Facebook'].map((provider) => (
+                                    <CardLogin
+                                        key={provider}
+                                        provider={provider}
+                                        isDay={isDay}
+                                        colors={{
+                                            buttonBg: theme.socialButton,
+                                            buttonHover: theme.socialButtonHover,
+                                            buttonShadow: theme.socialButtonShadow,
+                                            textColor: theme.regularText,
+                                            iconActive: isDay ? '#5D6E47' : '#16A34A' // Emerald-600 equivalent
+                                        }}
+                                    />
+                                ))}
+                            </div>
+
                             {/* DIRECT TO SIGN IN */}
                             <div className={`text-center text-xs sm:text-sm ${theme.regularText}`}
                                 style={getAnimationStyle(1.1)}>
