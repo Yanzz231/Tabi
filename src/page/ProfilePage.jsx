@@ -6,11 +6,13 @@ import {
 
 // FUNCTION
 import { isDaytime, colorData } from '../function/function';
+import { messagePopup } from '../function/swal';
 
 // COMPONENT
 import { BackgroundImage } from '../component/BackgroundComponents';
 import { ProfileContent, SettingsContent } from '../component/ProfileComponents';
 import { HeaderStat } from '../component/HeaderComponents';
+
 
 const ProfilePage = () => {
     const navigate = useNavigate();
@@ -34,26 +36,30 @@ const ProfilePage = () => {
     const theme = isDay ? colors.day : colors.night;
 
     const handleLogout = (e) => {
-        if (e) e.preventDefault();
-
-        localStorage.removeItem("image")
-        localStorage.removeItem("email")
-        localStorage.removeItem("username")
-        localStorage.removeItem("level")
-        localStorage.removeItem("xp")
-        localStorage.removeItem("streak")
-        localStorage.removeItem("lesson")
-        localStorage.removeItem("heart")
-        localStorage.removeItem("1")
-        localStorage.removeItem("2")
-        localStorage.removeItem("3")
-        localStorage.removeItem("4")
-        localStorage.removeItem("5")
-        localStorage.removeItem("6")
-        localStorage.removeItem("7")
-        localStorage.removeItem("8")
-
-        window.location.href = "/"
+        messagePopup("Yakin mau logout dari akun ini?").then((res) => {
+            if(res) {
+                if (e) e.preventDefault();
+        
+                localStorage.removeItem("image")
+                localStorage.removeItem("email")
+                localStorage.removeItem("username")
+                localStorage.removeItem("level")
+                localStorage.removeItem("xp")
+                localStorage.removeItem("streak")
+                localStorage.removeItem("lesson")
+                localStorage.removeItem("heart")
+                localStorage.removeItem("1")
+                localStorage.removeItem("2")
+                localStorage.removeItem("3")
+                localStorage.removeItem("4")
+                localStorage.removeItem("5")
+                localStorage.removeItem("6")
+                localStorage.removeItem("7")
+                localStorage.removeItem("8")
+        
+                window.location.href = "/"
+            }
+        })
     }
 
     const userStats = {
