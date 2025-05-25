@@ -14,6 +14,8 @@ import { ProfileContent, SettingsContent } from '../component/ProfileComponents'
 import { HeaderStat } from '../component/HeaderComponents';
 
 const ProfilePage = () => {
+    const navigate = useNavigate();
+    const [isDay, setIsDay] = useState(isDaytime());
     const [activeTab, setActiveTab] = useState('profile');
     const currentStreak = localStorage.getItem("streak")
     const points = localStorage.getItem("xp")
