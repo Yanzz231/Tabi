@@ -35,7 +35,7 @@ const ProfilePage = () => {
     const theme = isDay ? colors.day : colors.night;
 
     const handleLogout = (e) => {
-        messagePopup("Yakin mau logout dari akun ini?").then((res) => {
+        messagePopup("Yakin mau logout dari akun ini?", "Ya", "Tidak", "warning").then((res) => {
             if(res) {
                 if (e) e.preventDefault();
         

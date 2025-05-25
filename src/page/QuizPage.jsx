@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 // FUNCTION
 import { isDaytime, quizData } from '../function/function';
+import { messagePopup } from '../function/swal';
 
 // COMPONENTS
 import { BackgroundImage } from '../component/BackgroundComponents';
@@ -25,13 +26,14 @@ const TabiQuizPage = () => {
 
   const [quiz, setQuiz] = useState({ questions: [] });
   const [loop, setLoop] = useState(true);
+  const [allowNavigation, setAllowNavigation] = useState(false);
 
   const hintRef = useRef(null);
   const cardRef = useRef(null);
 
   useEffect(() => {
-    if(localStorage.getItem(parseInt(id) - 1) === null && id !== "1") {
-       window.location.href = "/learn"
+    if (localStorage.getItem(parseInt(id) - 1) === null && id !== "1") {
+      window.location.href = "/learn"
     }
 
     if (localStorage.getItem("email") === null) {
@@ -50,6 +52,46 @@ const TabiQuizPage = () => {
     return () => clearInterval(interval);
   }, [loop, id, navigate]);
 
+  useEffect(() => {
+    window.history.pushState(null, null, window.location.pathname);
+    
+    const handlePopState = (e) => {
+      window.history.pushState(null, null, window.location.pathname);
+      
+      if (!allowNavigation) {
+        handleBackNavigation(e);
+      }
+    };
+
+    const handleBeforeUnload = (e) => {
+      if (!allowNavigation) {
+        e.preventDefault();
+        e.returnValue = '';
+        return '';
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [allowNavigation]);
+
+  const handleBackNavigation = (e) => {
+    if (e) e.preventDefault();
+    
+    messagePopup("Yakin mau keluar? progressmu akan hilang.", "Ya", "Tidak", "warning").then((res) => {
+      if (res) {
+        setAllowNavigation(true);
+        setTimeout(() => {
+          navigate('/learn');
+        }, 100);
+      }
+    });
+  };
 
   const colors = {
     day: {
@@ -160,6 +202,9 @@ const TabiQuizPage = () => {
           localStorage.setItem("xp", parseInt(getXp) + 20);
 
           localStorage.setItem(id, score);
+          
+          setAllowNavigation(true);
+          
           navigate('/quiz-results', {
             state: {
               score,
@@ -205,8 +250,8 @@ const TabiQuizPage = () => {
     }
   };
 
-  const goBack = () => {
-    navigate('/learn');
+  const goBack = (e) => {
+    handleBackNavigation(e);
   };
 
   const currentQuizQuestion = quiz?.questions[currentQuestion];

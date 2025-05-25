@@ -1,7 +1,7 @@
 export const isDaytime = () => {
   const hour = new Date().getHours();
   // return hour >= 7 && hour < 18;
-  return true
+  return false
 };
 
 export const quizData = (id, path) => {
